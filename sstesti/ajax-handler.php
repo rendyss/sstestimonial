@@ -22,12 +22,8 @@ function sstestimonials() {
 	//Validate nonce
 	if ( wp_verify_nonce( $vNonce, 'ss_val_nonce' ) ) {
 		if ( $vName && $vEmail && $vPhone && $vContent ) {
-			$ssTestimonials = new SS_Testimonials();
-			$insert         = $ssTestimonials->insert( $vName, $vEmail, $vPhone, $vContent );
-			$result         = $insert;
-			if ( ! $insert->is_error ) {
-				$result->message = "Tetimonial successfully submitted";
-			}
+			$ssIO   = new SS_IO();
+			$result = $ssIO->insert( $vName, $vEmail, $vPhone, $vContent );
 		} else {
 			$result->message = "All fields are required";
 		}

@@ -11,10 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-//Require other files
-require_once "ajax-handler.php";
-require_once "hooks.php";
-
 //Check if `SS_Helper` class is already exist, if not then create one
 if ( ! class_exists( 'SS_Helper' ) ) {
 	class SS_Helper {
@@ -43,18 +39,19 @@ if ( ! class_exists( 'SS_Helper' ) ) {
 //Check if `SS_Testimonials` class is already exist, if not then create one
 if ( ! class_exists( 'SS_Testimonials' ) ) {
 	class SS_Testimonials {
-		public $tId;
-		public $tName;
-		public $tEmail;
-		public $tPhone;
-		public $tContent;
-		public $tTime;
 
 		function __construct() {
 
+			$this->loadfiles();
 			//Add shortocde to display add form
 			add_shortcode( 'ss_testimonial', array( $this, 'ss_shortcode_callback' ) );
+		}
 
+		//require other files
+		function loadfiles() {
+			require_once plugin_dir_path( __FILE__ ) . 'class.ssIO.php';
+			require_once plugin_dir_path( __FILE__ ) . 'hooks.php';
+			require_once plugin_dir_path( __FILE__ ) . 'ajax-handler.php';
 		}
 
 		//Callback for `ss_testimonial` shortcode
@@ -64,67 +61,30 @@ if ( ! class_exists( 'SS_Testimonials' ) ) {
 
 		//function to insert a new testimonial
 		function insert( $name, $email, $phone, $content ) {
-			$result = new SS_Helper();
-			global $wpdb;
-			$insert = $wpdb->insert( $wpdb->prefix . 'testimonials', array(
-				'name'  => $name,
-				'time'  => current_time( 'mysql' ),
-				'email' => $email,
-				'phone' => $phone,
-				'text'  => $content
-			) );
-			if ( ! $insert ) {
-				$result->message = "Failed to insert testimonial";
-			} else {
-				$result->is_error = false;
-			}
+			$ssIO = new SS_IO();
 
-			return $result;
+			return $ssIO->insert( $name, $email, $phone, $content );
 		}
 
-		//function to display random testimonial
+//		//function to display random testimonial
 		function get_random() {
-			global $wpdb;
-			$random = $wpdb->get_row( 'SELECT * from ' . $wpdb->prefix . 'testimonials ORDER BY RAND()', ARRAY_A );
-			if ( $random ) {
-				$this->tId      = $random['id'];
-				$this->tName    = $random['name'];
-				$this->tEmail   = $random['email'];
-				$this->tPhone   = $random['phone'];
-				$this->tContent = $random['text'];
-				$this->tTime    = $random['time'];
-			}
+			$ssIO = new SS_IO();
 
-			return $this;
+			return $ssIO->get_random();
 		}
 
 		//function to delete testimonial
 		function delete( $id ) {
-			global $wpdb;
-			$result = new SS_Helper();
-			if ( $id ) {
-				$delete = $wpdb->delete( $wpdb->prefix . 'testimonials', array( 'id' => $id ) );
-				if ( $delete ) {
-					$result->is_error = false;
-				}
-			} else {
-				$result->message = "Please provide valid id";
-			}
+			$ssIO = new SS_IO();
 
-			return $result;
+			return $ssIO->delete( $id );
 		}
 
 		//function to display testimonials
 		function display() {
-			$result = new SS_Helper();
-			global $wpdb;
-			$allTestimonials = $wpdb->get_results( 'SELECT * from ' . $wpdb->prefix . 'testimonials', ARRAY_A );
-			if ( $allTestimonials ) {
-				$result->items    = $allTestimonials;
-				$result->is_error = false;
-			}
+			$ssIO = new SS_IO();
 
-			return $result;
+			return $ssIO->display();
 		}
 
 		//function to display insert form
