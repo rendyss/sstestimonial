@@ -34,7 +34,5 @@ function sstestimonials(){
     }else{
         $result->message = "Failed to submit testimonial";
     }
-    // wp_redirect(!$result->is_error ? add_query_arg('sc','ok',$base):add_query_arg('err','ok',$base));
-    echo json_encode( $result );
-    wp_die();
+    wp_send_json( $result )
 }

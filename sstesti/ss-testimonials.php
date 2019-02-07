@@ -145,4 +145,41 @@ if(!class_exists('SS_Testimonials')){
 	
 }
 
+//Prepare custom table and dummy record
+register_activation_hook( __FILE__, 'ss_first_init' );
+function ss_first_init() {
+
+	global $wpdb;
+	global $jal_db_version;
+
+	$table_name = $wpdb->prefix . 'testimonials';
+
+	$charset_collate = $wpdb->get_charset_collate();
+
+	$sql = "CREATE TABLE $table_name (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+		name tinytext NOT NULL,
+		text text NOT NULL,
+		phone tinytext NOT NULL,
+		email tinytext NOT NULL,
+		PRIMARY KEY  (id)
+	) $charset_collate;";
+
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	dbDelta( $sql );
+
+	$wpdb->insert(
+		$table_name,
+		array(
+			'name'  => 'Rendy',
+			'time'  => current_time( 'mysql' ),
+			'text'  => 'Hi there, this is just a dummy text, thank you',
+			'phone' => '082219186349',
+			'email' => 'rendy.de.p@gmail.com',
+		)
+	);
+
+}
+
 $ssTestimonials = new SS_Testimonials();
