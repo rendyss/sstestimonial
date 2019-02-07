@@ -59,7 +59,7 @@ if ( ! class_exists( 'SS_Testimonials' ) ) {
 
 		//Callback for `ss_testimonial` shortcode
 		function ss_shortcode_callback() {
-			$this->display_form();
+			return $this->display_form();
 		}
 
 		//function to insert a new testimonial
@@ -129,20 +129,22 @@ if ( ! class_exists( 'SS_Testimonials' ) ) {
 
 		//function to display insert form
 		function display_form() {
-			echo '<div class="parentform">';
-			echo '<div class="ntf"></div>';
-			echo '<form action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" method="post">';
+			$htmlresult = '<div class="parentform">';
+			$htmlresult .= '<div class="ntf"></div>';
+			$htmlresult .= '<form action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" method="post">';
 			// echo '<input type="hidden" name="action" value="sstestimonials"/>';
-			wp_nonce_field( 'ss_val_nonce', 'ss_form_nonce' );
-			echo '<p>Name<br/><input type="text" name="ss_name" pattern="[a-zA-Z0-9 ]+" value="" required/></p>';
-			echo '<p>Email<br/>';
-			echo '<input type="email" name="ss_email" value="" required/></p>';
-			echo '<p>Phone Number<br/>';
-			echo '<input type="text" name="ss_phone" pattern="[0-9]+" value="" required/></p>';
-			echo '<p>Testimonial<br/><textarea rows="10" name="ss_testi" required></textarea></p>';
-			echo '<p><button type="button" class="btnsend" name="ss_submit">Submit</button></p>';
-			echo '</form>';
-			echo '</div>';
+			$htmlresult .= wp_nonce_field( 'ss_val_nonce', 'ss_form_nonce', true, false );
+			$htmlresult .= '<p>Name<br/><input type="text" name="ss_name" pattern="[a-zA-Z0-9 ]+" value="" required/></p>';
+			$htmlresult .= '<p>Email<br/>';
+			$htmlresult .= '<input type="email" name="ss_email" value="" required/></p>';
+			$htmlresult .= '<p>Phone Number<br/>';
+			$htmlresult .= '<input type="text" name="ss_phone" pattern="[0-9]+" value="" required/></p>';
+			$htmlresult .= '<p>Testimonial<br/><textarea rows="10" name="ss_testi" required></textarea></p>';
+			$htmlresult .= '<p><button type="button" class="btnsend" name="ss_submit">Submit</button></p>';
+			$htmlresult .= '</form>';
+			$htmlresult .= '</div>';
+
+			return $htmlresult;
 		}
 	}
 
