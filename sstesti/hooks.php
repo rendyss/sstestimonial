@@ -1,16 +1,16 @@
 <?php
 
 //Prevent direct access to this file
-if(!defined('ABSPATH')){
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 //Enqueue assets
-add_action( 'wp_enqueue_scripts', 'ss_enqueue_assets');
-function ss_enqueue_assets(){
-	if(!is_admin()){
-		wp_enqueue_script('ajax.js', plugin_dir_url( __FILE__ ) . "assets/js/ajax.js", array('jquery'), false, true );
-		wp_localize_script('ajax.js', 'my_ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
+add_action( 'wp_enqueue_scripts', 'ss_enqueue_assets' );
+function ss_enqueue_assets() {
+	if ( ! is_admin() ) {
+		wp_enqueue_script( 'ajax.js', plugin_dir_url( __FILE__ ) . "assets/js/ajax.js", array( 'jquery' ), false, true );
+		wp_localize_script( 'ajax.js', 'my_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 	}
 }
 
@@ -43,18 +43,18 @@ function ss_delete_testi() {
 	if ( ! ( isset( $_GET['id'] ) || isset( $_POST['id'] ) || ( isset( $_REQUEST['action'] ) && 'destroy' == $_REQUEST['action'] ) ) ) {
 		wp_die( 'No testimonial to delete has been supplied!' );
 	}
-    $id = ( isset( $_GET['id'] ) ? absint( $_GET['id'] ) : absint( $_POST['id'] ) );
-    
-    //If `$id` is provided, then delete it
+	$id = ( isset( $_GET['id'] ) ? absint( $_GET['id'] ) : absint( $_POST['id'] ) );
+
+	//If `$id` is provided, then delete it
 	if ( isset( $id ) && $id != null ) {
-        $ssTestimonials = new SS_Testimonials();
-        $delete = $ssTestimonials->delete($id);
-        if(!$delete->is_error){
-            wp_redirect( admin_url( 'admin.php?page=ss-testimonials' ) );    
-            exit;
-        }else{
-            wp_die($delete->message);
-        }
+		$ssTestimonials = new SS_Testimonials();
+		$delete         = $ssTestimonials->delete( $id );
+		if ( ! $delete->is_error ) {
+			wp_redirect( admin_url( 'admin.php?page=ss-testimonials' ) );
+			exit;
+		} else {
+			wp_die( $delete->message );
+		}
 	} else {
 		wp_die( 'Failed to delete testimonial' );
 	}
@@ -68,7 +68,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 
 class SS_Testimonials_Table extends WP_List_Table {
 
-    //Prepare its columns
+	//Prepare its columns
 	function get_columns() {
 		$columns = array(
 			'cb'    => '<input type = "checkbox" />',
@@ -82,11 +82,11 @@ class SS_Testimonials_Table extends WP_List_Table {
 		return $columns;
 	}
 
-    //Function to prepare the items from database;
+	//Function to prepare the items from database;
 	function prepare_items() {
 		global $wpdb;
-        $ssTestimonials = new SS_Testimonials();
-        $show_testimonials = $ssTestimonials->display();
+		$ssTestimonials        = new SS_Testimonials();
+		$show_testimonials     = $ssTestimonials->display();
 		$columns               = $this->get_columns();
 		$hidden                = array();
 		$sortable              = array();
@@ -94,9 +94,9 @@ class SS_Testimonials_Table extends WP_List_Table {
 		$this->items           = $show_testimonials->items;
 		$per_page              = 10;
 		$current_page          = $this->get_pagenum();
-        $total_items           = count( $this->items );
-        
-        //Slice items for paging
+		$total_items           = count( $this->items );
+
+		//Slice items for paging
 		$new_data = array_slice( $this->items, ( ( $current_page - 1 ) * $per_page ), $per_page );
 
 		$this->set_pagination_args( array(
@@ -106,7 +106,7 @@ class SS_Testimonials_Table extends WP_List_Table {
 		$this->items = $new_data;
 	}
 
-    //Assign item value for each column
+	//Assign item value for each column
 	function column_default( $item, $column_name ) {
 		switch ( $column_name ) {
 			case 'name':
@@ -138,14 +138,14 @@ class SS_Testimonials_Table extends WP_List_Table {
 		);
 	}
 
-    function get_bulk_actions() {
+	function get_bulk_actions() {
 		$actions = array(
 			'delete' => 'Delete'
 		);
 
 		return $actions;
-    }
-    
+	}
+
 }
 
 //Register the widget
@@ -175,7 +175,7 @@ class SS_Testimonials_Widget extends WP_Widget {
 			echo "<strong>" . $random_testi[0]['name'] . "</strong> said:<br/>";
 			echo "<blockquote>" . $random_testi[0]['text'] . "</blockquote>";
 			echo "<small>On " . $random_testi[0]['time'] . "</small>";
-        }
+		}
 		echo $args['after_widget'];
 	}
 
