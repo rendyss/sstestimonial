@@ -59,34 +59,6 @@ if ( ! class_exists( 'SS_Testimonials' ) ) {
 			return $this->display_form();
 		}
 
-		//function to insert a new testimonial
-		function insert( $name, $email, $phone, $content ) {
-			$ssIO = new SS_IO();
-
-			return $ssIO->insert( $name, $email, $phone, $content );
-		}
-
-//		//function to display random testimonial
-		function get_random() {
-			$ssIO = new SS_IO();
-
-			return $ssIO->get_random();
-		}
-
-		//function to delete testimonial
-		function delete( $id ) {
-			$ssIO = new SS_IO();
-
-			return $ssIO->delete( $id );
-		}
-
-		//function to display testimonials
-		function display() {
-			$ssIO = new SS_IO();
-
-			return $ssIO->display();
-		}
-
 		//function to display insert form
 		function display_form() {
 			$htmlresult = '<div class="parentform">';
