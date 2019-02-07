@@ -11,6 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+//Require other files
+require_once "ajax-handler.php";
+require_once "hooks.php";
+
 //Check if `SS_Helper` class is already exist, if not then create one
 if ( ! class_exists( 'SS_Helper' ) ) {
 	class SS_Helper {
@@ -47,10 +51,6 @@ if ( ! class_exists( 'SS_Testimonials' ) ) {
 		public $tTime;
 
 		function __construct() {
-
-			//Require other files
-			require_once "ajax-handler.php";
-			require_once "hooks.php";
 
 			//Add shortocde to display add form
 			add_shortcode( 'ss_testimonial', array( $this, 'ss_shortcode_callback' ) );
