@@ -47,8 +47,8 @@ function ss_delete_testi() {
 
 	//If `$id` is provided, then delete it
 	if ( isset( $id ) && $id != null ) {
-		$ssTestimonials = new SS_Testimonials();
-		$delete         = $ssTestimonials->delete( $id );
+		$ssIO   = new SS_IO();
+		$delete = $ssIO->delete( $id );
 		if ( ! $delete->is_error ) {
 			wp_redirect( admin_url( 'admin.php?page=ss-testimonials' ) );
 			exit;
@@ -84,9 +84,8 @@ class SS_Testimonials_Table extends WP_List_Table {
 
 	//Function to prepare the items from database;
 	function prepare_items() {
-		global $wpdb;
-		$ssTestimonials        = new SS_Testimonials();
-		$show_testimonials     = $ssTestimonials->display();
+		$ssIO                  = new SS_IO();
+		$show_testimonials     = $ssIO->display();
 		$columns               = $this->get_columns();
 		$hidden                = array();
 		$sortable              = array();
